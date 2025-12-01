@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>SCSO Test Suite Generator</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <!-- html2canvas for PNG Export (added) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCSO Test Suite Generator</title>
 
-  <style>
-    body {
-      font-family: 'Trebuchet MS', sans-serif;
-      background-image: url('/images/r99e_l0hq_210426.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-      color: #5C4D3D;
-    }
+    <!-- html2canvas for PNG Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-     .container {
+    <style>
+        body {
+            font-family: 'Trebuchet MS', sans-serif;
+            background-image: url('r99e_l0hq_210426.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            color: #5C4D3D;
+        }
+
+        .container {
             width: 90%;
             max-width: 500px;
             margin: 40px auto;
@@ -32,260 +33,185 @@
             position: relative; /* Needed for logo positioning */
         }
 
-    h2 {
-      color: #8B5A2B;
-      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
-      margin-bottom: 25px;
-    }
+        /* Sand Cat Logo */
+        .sandcat-logo {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 80px;
+            height: 80px;
+        }
 
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 20px;
-      color: #6B4F3C;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
-    }
+        h2 {
+            color: #8B5A2B;
+            margin-bottom: 5px;
+        }
 
-    input {
-      width: 80%;
-      padding: 12px;
-      margin-top: 8px;
-      border: 2px solid #C19A6B;
-      border-radius: 8px;
-      font-size: 16px;
-      text-align: center;
-      background-color: rgba(255, 253, 245, 0.8);
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s;
-    }
+        h3 {
+            color: #6B4F3C;
+            margin-top: 0;
+        }
 
-    input:focus {
-      outline: none;
-      border-color: #8B5A2B;
-      box-shadow: 0 0 8px rgba(210, 145, 70, 0.5);
-    }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 20px;
+            color: #6B4F3C;
+        }
 
-    button {
-      margin-top: 25px;
-      padding: 14px;
-      width: 85%;
-      background: linear-gradient(to bottom, #D4A76A, #B78B56);
-      color: #FFF9F0;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(92, 77, 61, 0.2);
-    }
+        input {
+            width: 80%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 2px solid #C19A6B;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            background-color: rgba(255, 253, 245, 0.8);
+        }
 
-    button:hover {
-      background: linear-gradient(to bottom, #C19A6B, #A0784D);
-      box-shadow: 0 6px 12px rgba(92, 77, 61, 0.3);
-    }
+        .formula-container, .result-container {
+            width: 80%;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 248, 220, 0.6);
+            border: 1px dashed #C19A6B;
+            text-align: center;
+        }
 
-    .formula-container {
-      margin: 10px auto;
-      padding: 8px 15px;
-      background-color: rgba(255, 248, 220, 0.6);
-      border-radius: 8px;
-      font-family: 'Courier New', monospace;
-      font-size: 24px;
-      color: #5C4D3D;
-      border: 1px dashed #C19A6B;
-      display: inline-block;
-    }
+        .formula-container {
+            font-family: 'Courier New';
+            font-size: 22px;
+        }
 
-    .result-container {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: rgba(255, 248, 220, 0.85);
-      border-radius: 10px;
-      font-weight: bold;
-      color: #6B4F3C;
-      border: 1px dashed #C19A6B;
-    }
+        .result-container {
+            background-color: rgba(255, 248, 220, 0.85);
+            font-weight: bold;
+            min-height: 60px;
+        }
 
-    .result-header {
-      text-align: center;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
+        button {
+            margin-top: 20px;
+            padding: 14px;
+            width: 85%;
+            background: linear-gradient(to bottom, #D4A76A, #B78B56);
+            color: #FFF9F0;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
 
-    .result-output {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      column-gap: 25px;
-      row-gap: 3px;
-      font-family: 'Courier New', monospace;
-      text-align: left;
-      font-size: 15px;
-      justify-content: center;
-      margin: 0 auto;
-      max-width: 95%;
-      white-space: pre;
-      line-height: 1.0;
-      letter-spacing: 0.4px;
-    }
+        .print-controls {
+            margin-top: 20px;
+        }
 
-    .result-output p {
-      margin: 0;
-      padding: 0;
-      text-align: left;
-    }
+        .print-controls button {
+            width: 40%;
+            margin: 10px;
+        }
 
-    @media (max-width: 900px) {
-      .result-output {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 18px;
-      }
-    }
+        /* Footer with logos */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #5C4D3D;
+        }
+        /* Make both logos small and same size */
+.footer-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
 
-    @media (max-width: 600px) {
-      .result-output {
-        grid-template-columns: 1fr;
-        text-align: center;
-        row-gap: 2px;
-        max-width: 80%;
-      }
+.footer-logo {
+    height: 55px;   /* adjust size here */
+    width: auto;
+    object-fit: contain;
+}
+        .footer img {
+            height: 45px;
+            margin: 0 10px;
+        }
 
-      .result-output p {
-        text-align: center;
-        font-size: 16px;
-      }
-    }
-
-    .sand-cat-icon {
-      position: absolute;
-      right: 15px;
-      top: 10px;
-      width: 90px;
-      height: 90px;
-      background-image: url('/images/ec2e0992-64c8-4940-90fe-1a89ec77c7fe.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-
-    /* --- Added: small export control area and footer styles (from second file) --- */
-    .controls-row {
-      margin-top: 12px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .small-button {
-      width: 160px;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      background: linear-gradient(to bottom, #D4A76A, #B78B56);
-      color: #FFF9F0;
-      box-shadow: 0 4px 8px rgba(92,77,61,0.15);
-    }
-
-    .footer {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 18px;
-      background-color: rgba(237,201,175,0.85);
-      border-radius: 12px;
-      border: 2px solid #A38B6A;
-      color: #5C4D3D;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    .footer-logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
-
-    .footer-logo {
-      height: 55px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .developers {
-      margin-top: 8px;
-      line-height: 1.3;
-    }
-  </style>
+        .copyright {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #6B4F3C;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="container" id="captureBox">
-    <div class="sand-cat-icon"></div>
 
-    <h2>SandCatTest</h2>
-    <h3>Online Testing Tool Based on Sand Cat Swarm Optimization</h3>
+    <div class="container" id="captureBox">
 
-    <div class="formula-container" id="formulaDisplay">1, 2²</div>
+        <!-- Sand cat logo -->
+        <img src="ec2e0992-64c8-4940-90fe-1a89ec77c7fe.png" class="sandcat-logo" alt="Sand Cat Logo">
 
-    <label for="strength">Strength (t):</label>
-    <input type="number" id="strength" min="1" value="2" oninput="updateFormula()">
+        <h2>SandCatTest</h2>
+        <h3>Online Testing Tool Based on Sand Cat Swarm Optimization</h3>
 
-    <label for="numInputs">Number of Inputs:</label>
-    <input type="number" id="numInputs" min="1" value="2" oninput="updateFormula()">
+        <div class="formula-container" id="formulaDisplay">
+            → 2, 2²
+        </div>
 
-    <label for="paramValue">Value of Parameter:</label>
-    <input type="number" id="paramValue" min="1" value="2" oninput="updateFormula()">
+        <label for="strength">Strength (t):</label>
+        <input type="number" id="strength" value="2" oninput="updateFormula()">
 
-    <button onclick="submitForm()">Generate Test Suite</button>
+        <label for="numInputs">Number of Inputs:</label>
+        <input type="number" id="numInputs" value="2" oninput="updateFormula()">
 
-    <div class="result-container" id="result-container">
-      <div id="result" class="result-output">Awaiting input...</div>
+        <label for="paramValue">Value of Parameter:</label>
+        <input type="number" id="paramValue" value="2" oninput="updateFormula()">
+
+        <button onclick="submitForm()">Generate Test Suite</button>
+
+        <div class="result-container" id="result">
+            Awaiting input...
+        </div>
+
+        <div class="print-controls">
+            <button id="printBtn" style="display:none;" onclick="savePNG()">Save PNG</button>
+            <button id="downloadBtn" style="display:none;" onclick="downloadText()">Download .txt</button>
+        </div>
     </div>
 
-    <!-- Added small controls: orientation selector + export buttons -->
-    <div class="controls-row" style="margin-top: 10px;">
-      <button class="small-button" id="savePngBtn" style="display:none;" onclick="savePNG()">Save PNG</button>
-      <button class="small-button" id="downloadTxtBtn" style="display:none;" onclick="downloadText()">Download .txt</button>
-    </div>
-  </div>
+    <!-- Footer section with UniMAP + Faculty logos -->
+     <div class="container">
 
-  <!-- Footer (copied/adapted from second code) -->
-  <div class="footer" id="footerBlock">
-    <div class="footer-logos">
-      <!-- Replace with your actual logo file names or paths -->
-      <img src="/images/unimap logo.png" class="footer-logo" alt="UniMAP Logo" onerror="this.style.display='none'">
-      <img src="/images/advacomp logo.png" class="footer-logo" alt="ADVCOMP Logo" onerror="this.style.display='none'">
+        <div class="footer-logos">
+        <img src="unimap logo.png" class="footer-logo" alt="UniMAP Logo">
+        <img src="advacomp logo.png" class="footer-logo" alt="ADVCOMP Logo">
     </div>
 
-    <div class="copyright">
-      <strong>© 2025 Universiti Malaysia Perlis (UniMAP) — Faculty of Intelligent Computing</strong>
-    </div>
+        <div class="copyright">
+            <strong>© 2025 Universiti Malaysia Perlis (UniMAP) — Faculty of Intelligent Computing</strong>
+        </div>
 
-    <div class="developers">
+        <div class="developers">
       Develop by:<br>
       Muhammad Aiman bin Mohd Asyraf,<br> Assoc. Prof. Dr. Rozmie Razif B. Othman,<br>
       Ts. Dr. Mohd Zamri B. Zahir Ahmad,<br> Ts. Dr. Ahmad Ashraf Abdul Halim,<br>
       Murad Muhammad Hasan Salih Al-Walidi
     </div>
-  </div>
+    </div>
 
-  <script>
+<script>
     function updateFormula() {
-      const strength = document.getElementById("strength").value || 2;
-      const numInputs = document.getElementById("numInputs").value || 2;
-      const paramValue = document.getElementById("paramValue").value || 2;
-      document.getElementById("formulaDisplay").innerHTML = `${strength}, ${numInputs}<sup>${paramValue}</sup>`;
+        const strength = document.getElementById("strength").value;
+        const numInputs = document.getElementById("numInputs").value;
+        const paramValue = document.getElementById("paramValue").value;
+
+        document.getElementById("formulaDisplay").innerHTML =
+            `${strength}, ${numInputs}<sup>${paramValue}</sup>`;
     }
 
     async function submitForm() {
-      let strength = document.getElementById("strength").value;
+        let strength = document.getElementById("strength").value;
         let numInputs = document.getElementById("numInputs").value;
         let paramValue = document.getElementById("paramValue").value;
 
@@ -301,97 +227,41 @@
         document.getElementById("downloadBtn").style.display = "inline-block";
     }
 
-    function formatResultOutput(rawText) {
-      const lines = rawText.trim().split(/\r?\n/).filter(l => l.trim() !== "");
-      const header = lines.slice(0, 2).join("<br>");
-      const results = lines.slice(2)
-        .map(line => `<p>${line}</p>`)
-        .join("");
-
-      return `
-        <div class="result-header">${header}</div>
-        <div class="result-output">${results}</div>
-      `;
+    async function savePNG() {
+        const box = document.getElementById("captureBox");
+        const canvas = await html2canvas(box, { scale: 2 });
+        const imgData = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = imgData;
+        link.download = "SandCatTest.png";
+        link.click();
     }
 
-    // --- Added: PNG and TXT export functions (adapted from your second code) ---
-    async function savePNG() {
-  // safely read orientation (fallback to 'portrait' if select is missing)
-  const orientationEl = document.getElementById('orientation');
-  const orientation = orientationEl ? orientationEl.value : 'portrait';
-
-  const box = document.getElementById("captureBox");
-  if (!box) {
-    alert('Capture box not found.');
-    return;
-  }
-
-  // html2canvas will capture the element
-  const canvas = await html2canvas(box, { scale: 2 });
-
-  if (orientation === 'portrait') {
-    const imgData = canvas.toDataURL("image/png");
-    const link = document.createElement("a");
-    link.href = imgData;
-    link.download = "SandCatTest.png";
-    link.click();
-    return;
-  }
-
-  // landscape: rotate canvas 90deg and export
-  const rotated = document.createElement('canvas');
-  rotated.width = canvas.height;
-  rotated.height = canvas.width;
-  const ctx = rotated.getContext('2d');
-
-  ctx.translate(rotated.width / 2, rotated.height / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
-
-  const imgData = rotated.toDataURL("image/png");
-  const link = document.createElement("a");
-  link.href = imgData;
-  link.download = "SandCatTest_landscape.png";
-  link.click();
-}
-
     function downloadText() {
-  // safely read orientation (fallback to 'portrait' if select is missing)
-  const orientationEl = document.getElementById('orientation');
-  const orientation = orientationEl ? orientationEl.value : 'portrait';
+        let strength = document.getElementById("strength").value;
+        let numInputs = document.getElementById("numInputs").value;
+        let paramValue = document.getElementById("paramValue").value;
 
-  const strength = document.getElementById("strength").value || '';
-  const numInputs = document.getElementById("numInputs").value || '';
-  const paramValue = document.getElementById("paramValue").value || '';
+        let raw = document.getElementById("result").innerText;
 
-  // Grab rendered result text (raw)
-  const rawContainer = document.getElementById("result-container");
-  let raw = rawContainer ? rawContainer.innerText : '';
+        let cleaned = raw
+            .replace(/Result Set.*?\n/g, "")
+            .replace(/Result Set.*cases\./g, "")
+            .trim();
 
-  // Clean some server labels if present
-  let cleaned = raw
-    .replace(/Result Set.*?\n/g, "")
-    .replace(/Result Set.*cases\./g, "")
-    .trim();
+        let count = cleaned.split("\n").filter(line => /^\d+\)/.test(line)).length;
 
-  let count = 0;
-  if (cleaned.length) {
-    count = cleaned.split("\n").filter(line => /^\d+\)/.test(line)).length;
-  }
+        let header = `Result for configuration, t(strength)-${strength} , ${numInputs}^${paramValue} is\n`;
+        let footer = `\nCompleted with ${count} test cases.`;
 
-  const header = `Result for configuration, t(strength)-${strength} , ${numInputs}^${paramValue} (${orientation})\n\n`;
-  const footer = `\nCompleted with ${count} test cases.`;
+        let finalText = header + cleaned + footer;
 
-  const finalText = header + cleaned + footer;
-
-  const blob = new Blob([finalText], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "test_suite.txt";
-  link.click();
-}
-
-    document.addEventListener('DOMContentLoaded', updateFormula);
-  </script>
+        let blob = new Blob([finalText], { type: "text/plain" });
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "test_suite.txt";
+        link.click();
+    }
+</script>
 </body>
 </html>
