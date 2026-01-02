@@ -1,0 +1,16 @@
+# Maven
+**/target/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Archives
+*.zip
