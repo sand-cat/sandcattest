@@ -21,7 +21,7 @@ public class Main {
         /* ===============================
            STATIC FILES (UI)
            =============================== */
-        staticFiles.location("/static"); // src/main/resources/static
+        staticFiles.location("/public"); 
 
         get("/", (req, res) -> {
             res.redirect("/main.html");
