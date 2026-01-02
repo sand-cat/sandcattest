@@ -1,16 +1,10 @@
 # Maven
 **/target/
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-Thumbs.db
+*.class
 
 # IDE
 .vscode/
 .idea/
 
-# Archives
-*.zip
+# OS
+.DS_Store
