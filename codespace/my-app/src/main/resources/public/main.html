@@ -439,7 +439,34 @@
         .btn-container {
             text-align: center;
         }
-        
+
+        /* ===== Loading state ===== */
+        .loading-message {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+
+            height: 200px;
+            font-size: 16px;
+            color: #718096;
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 36px;
+            height: 36px;
+            border: 4px solid #e2e8f000;
+            border-top: 4px solid #3182ce;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+                
         /* Test Cases Output */
         .test-cases-section {
             background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
@@ -989,11 +1016,17 @@
         async function generateTestCasesBackend() {
             const strength = parseInt(document.getElementById('strengthInput').value) || 2;
 
+            const section = document.getElementById('testCasesSection');
+            const container = document.getElementById('testCasesContainer');
+            const count = document.getElementById('testCasesCount');
+            const generateBtn = document.querySelector('.strength-section .generate-btn');
+
             const validParams = parameters.filter(p => p.inputs.length > 0);
             const paramValue = validParams.length; // k = number of parameters
 
             if (validParams.length === 0) {
                 alert("No parameters with inputs");
+                generateBtn.disabled = false;
                 return;
             }
 
@@ -1036,8 +1069,41 @@ if (strength > paramValue) {
             const baseUrl = "/generate";
             const url = `${baseUrl}?strength=${strength}&values=${valuesStr}`;
 
-            const res = await fetch(url);
-            const raw = await res.text();
+                section.style.display = 'block';
+
+            container.innerHTML = `
+                <div class="loading-message">
+                    <div class="loading-spinner"></div>
+                    <div>
+                        Calculating test suite...<br>
+                        <small>Please wait while the system processes your request</small>
+                    </div>
+                </div>
+            `;
+
+            count.textContent = "Processing…";
+
+            const originalText = generateBtn.textContent;
+            generateBtn.textContent = "Processing…";
+            generateBtn.disabled = true;
+
+            let raw;
+            try {
+                const res = await fetch(url);
+                raw = await res.text();
+            } catch (e) {
+                container.innerHTML = `
+                    <div class="loading-message">
+                        <strong>Failed to generate test suite</strong><br>
+                        Please try again.
+                    </div>
+                `;
+                count.textContent = "0 test cases generated";
+                generateBtn.textContent = originalText;
+                generateBtn.disabled = false;
+                return;
+            }
+
             lastRawResult = raw;
             lastStrength = strength;
             lastValues = values;
@@ -1045,6 +1111,9 @@ if (strength > paramValue) {
             const decoded = decodeBackendResult(raw, validParams);
 
             renderDecodedResults(decoded, strength);
+
+            generateBtn.textContent = originalText;
+            generateBtn.disabled = false;
         }
         
         function decodeRawResultToNames(raw) {
