@@ -722,6 +722,26 @@
         <!-- Test Cases Output -->
         <div class="test-cases-section" id="testCasesSection">
             <div id="captureBox">
+
+                <!-- ✅ PNG HEADER -->
+        <div id="pngHeader" style="
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 18px;
+            text-align: center;
+        ">
+            <div style="font-weight:600;">
+                Configuration:
+                <span id="pngConfig" style="color:#059669;"></span>
+            </div>
+            <div style="font-weight:500;">
+                Interaction Strength (t):
+                <span id="pngStrength" style="color:#2563eb;"></span>
+            </div>
+        </div>
+
             <div class="test-cases-title">Generated Test Cases</div>
             <div class="test-cases-count" id="testCasesCount">0 test cases generated</div>
             <div class="test-cases-container" id="testCasesContainer">
@@ -743,14 +763,14 @@
     </div>
 
     <div class="copyright">
-        <strong>© 2026 Universiti Malaysia Perlis (UniMAP) — Faculty of Intelligent Computing</strong>
+        <strong>© 2026 Universiti Malaysia Perlis (UniMAP) — Thursinar Energy</strong>
     </div>
 
     <div class="developers">
         Developed by:<br>
-        Muhammad Aiman bin Mohd Asyraf,<br>
-        Assoc. Prof. Dr. Rozmie Razif B. Othman,<br>
-        Ts. Dr. Mohd Zamri B. Zahir Ahmad,<br>
+        Muhammad Aiman Mohd Asyraf,<br>
+        Assoc. Prof. Dr. Rozmie Razif Othman,<br>
+        Ts. Dr. Mohd Zamri Zahir Ahmad,<br>
         Ts. Dr. Ahmad Ashraf Abdul Halim,<br>
         Murad Muhammad Hasan Salih Al-Walidi
     </div>
@@ -1158,25 +1178,39 @@ if (strength > paramValue) {
         }
 
         function renderDecodedResults(results, strength) {
-            const section = document.getElementById('testCasesSection');
-            const count = document.getElementById('testCasesCount');
-            const container = document.getElementById('testCasesContainer');
+    const section = document.getElementById('testCasesSection');
+    const count = document.getElementById('testCasesCount');
+    const container = document.getElementById('testCasesContainer');
 
-            container.innerHTML = '';
+    container.innerHTML = '';
 
-            results.forEach(r => {
-                const div = document.createElement('div');
-                div.className = 'test-case';
-                div.textContent = r;
-                container.appendChild(div);
-            });
+    results.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'test-case';
+        div.textContent = r;
+        container.appendChild(div);
+    });
 
-            const realCases = results.filter(r => r.match(/^\d+\)/));
+    const realCases = results.filter(r => /^\d+\)/.test(r));
 
-            count.textContent = `${realCases.length} test cases generated`;
-            section.style.display = 'block';
-            section.scrollIntoView({ behavior: 'smooth' });
-        }
+    // ✅ STORE FINAL STATE (single source of truth)
+    lastRawResult = realCases.join("\n");
+    lastStrength = document.getElementById("strengthInput")?.value || strength;
+    lastValues = parameters.filter(p => p.inputs.length > 0).map(p => p.inputs.length);
+
+    // UI count
+    count.textContent = `${realCases.length} test cases generated`;
+
+    // ✅ PNG HEADER DATA
+    const pngConfigEl = document.getElementById("pngConfig");
+    const pngStrengthEl = document.getElementById("pngStrength");
+
+    if (pngConfigEl) pngConfigEl.textContent = lastValues.join(", ");
+    if (pngStrengthEl) pngStrengthEl.textContent = lastStrength;
+
+    section.style.display = 'block';
+    section.scrollIntoView({ behavior: 'smooth' });
+}
         
                 function exportToXML() {
             if (parameters.length === 0) {
@@ -1291,42 +1325,80 @@ if (strength > paramValue) {
         }
 
         async function savePNG() {
-            const box = document.getElementById("captureBox");
-            const canvas = await html2canvas(box, {
-                scale: 2,
-                backgroundColor: "#ffffff"
-            });
-            const imgData = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.href = imgData;
-            link.download = "TestSuite.png";
-            link.click();
-        }
+    const box = document.getElementById("captureBox");
+    const container = document.getElementById("testCasesContainer");
+
+    // 🔐 Save original styles
+    const originalMaxHeight = container.style.maxHeight;
+    const originalOverflow = container.style.overflowY;
+
+    // 🔓 Expand container to show ALL test cases
+    container.style.maxHeight = "none";
+    container.style.overflowY = "visible";
+
+    // Force layout reflow
+    await new Promise(resolve => setTimeout(resolve, 50));
+
+    const canvas = await html2canvas(box, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        windowWidth: box.scrollWidth,
+        windowHeight: box.scrollHeight
+    });
+
+    // 🔁 Restore original styles
+    container.style.maxHeight = originalMaxHeight;
+    container.style.overflowY = originalOverflow;
+
+    const imgData = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = imgData;
+    link.download = "TestSuite.png";
+    link.click();
+}
 
         function downloadText() {
-            if (!lastRawResult) {
-                alert("No test suite generated yet.");
-                return;
-            }
+    if (!lastRawResult) {
+        alert("No test suite generated yet.");
+        return;
+    }
 
-            let cleaned = decodeRawResultToNames(lastRawResult);
-            let count = cleaned.split("\n").length;
+    let outputText;
 
-            let header =
-        `Test Suite
-        Interaction Strength (t): ${lastStrength}
-        Values: [${lastValues.join(", ")}]`;
+    // ✅ Check if result already contains names (not numbers)
+    const hasNames = /[a-zA-Z]/.test(lastRawResult);
 
-            let footer = `Completed with ${count} test cases.`;
+    if (hasNames) {
+        // Already decoded (from XML import)
+        outputText = lastRawResult
+            .split("\n")
+            .filter(l => l.trim())
+            .join("\n");
+    } else {
+        // Numeric result → decode normally
+        outputText = decodeRawResultToNames(lastRawResult);
+    }
 
-            let finalText = header + cleaned + footer;
+    const count = outputText
+        .split("\n")
+        .filter(line => /^\d+\)/.test(line))
+        .length;
 
-            let blob = new Blob([finalText], { type: "text/plain" });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "TestSuite.txt";
-            link.click();
-        }
+    const header =
+`Test Suite
+Interaction Strength (t): ${lastStrength}
+Values: [${lastValues.join(", ")}]`;
+
+    const footer = `Completed with ${count} test cases.`;
+
+    const finalText = `${header}\n\n${outputText}\n\n${footer}`;
+
+    const blob = new Blob([finalText], { type: "text/plain" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "TestSuite.txt";
+    link.click();
+}
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
