@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Combinatorial Test Design Interface</title>
+    <title>FlexiSolar</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     <style>
         * {
@@ -39,7 +39,8 @@
         
         .title {
             color: #2c5282;
-            font-size: 28px;
+            font-size: 40px;
+            text-align: center;
             margin-bottom: 8px;
             font-weight: 600;
             background: linear-gradient(90deg, #2c5282, #3182ce);
@@ -650,6 +651,12 @@
     margin-bottom: 15px;
 }
 
+.footer-logos img {
+    width: 300px;
+    height: auto;
+}
+
+
 .footer-logo {
     height: 45px;
     opacity: 0.85;
@@ -665,9 +672,16 @@
 </head>
 <body>
     <div class="container">
+
+        <div class="footer-logos">
+        <img src="images/unimap logo.png" class="footer-logo" alt="UniMAP Logo">
+        <img src="images/kpt logo.png" class="footer-logo" alt="ADVCOMP Logo">
+        <img src="images/thursinar.png" class="footer-logo" alt="Thursinar Logo">
+    </div>
+
         <div class="header">
-            <h1 class="title">Combinatorial Test Design Interface</h1>
-            <p class="subtitle">Specify system parameters and corresponding input domains for generating t-way combinatorial interaction test suites. Parameters are grouped based on domain cardinality.</p>
+            <h1 class="title">FlexiSolar: Testing Tool for Solar Harvesting Application</h1>
+            <p class="subtitle">Optimizing solar performance monitoring through advanced combinatorial test design to reduce false notifications and operational costs.</p>
         </div>
         
         <!-- Add Parameter -->
@@ -678,7 +692,6 @@
 
         <!-- XML Import / Export -->
         <div class="input-row">
-            <button class="add-btn" onclick="exportToXML()">Export XML</button>
             <input 
     type="file"
     id="xmlFileInput"
@@ -747,32 +760,24 @@
             <div class="test-cases-container" id="testCasesContainer">
                 <!-- Test cases will appear here -->
             </div>
-            </div>
-        </div>
-        
-        <div class="btn-container" style="margin-bottom:15px;">
+            <div class="btn-container" style="margin-bottom:5px; margin-top: 15px;">
                             <button class="generate-btn" onclick="savePNG()">Save as PNG</button>
+                            <button class="generate-btn" onclick="exportToXML()">Save as XML</button>
                             <button class="generate-btn" onclick="downloadText()">Save as TXT</button>
                         </div>
+            </div>
+        </div>
 
         <div class="footer">
-    <div class="footer-logos">
-        <img src="images/unimap logo.png" class="footer-logo" alt="UniMAP Logo">
-        <img src="images/advacomp logo.png" class="footer-logo" alt="ADVCOMP Logo">
-        <img src="images/thursinar.png" class="footer-logo" alt="Thursinar Logo">
-    </div>
 
     <div class="copyright">
-        <strong>© 2026 Universiti Malaysia Perlis (UniMAP) — Thursinar Energy</strong>
+        <strong>© 2026 FlexiSolar. All Rights Reserved</strong>
     </div>
 
     <div class="developers">
-        Developed by:<br>
-        Muhammad Aiman Mohd Asyraf,<br>
-        Assoc. Prof. Dr. Rozmie Razif Othman,<br>
-        Ts. Dr. Mohd Zamri Zahir Ahmad,<br>
-        Ts. Dr. Ahmad Ashraf Abdul Halim,<br>
-        Murad Muhammad Hasan Salih Al-Walidi
+        <strong>Developed by Universiti Malaysia Perlis (UniMAP) and Thursinar Corporation Sdn Bhd</strong><br>
+        <strong>This project is funded by the Ministry of Higher Education (KPT) Malaysia under the Industry Matching Program (IMaP)</strong><br>
+        <strong>Legal & IP Registered Copyright: CRLYXXXXXX – FlexiSolar: Testing Tool for Solar Harvesting Application</strong><br>
     </div>
 </div>
     </div>
