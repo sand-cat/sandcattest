@@ -808,6 +808,7 @@
         let inputEncoding = {}; 
         // inputEncoding[paramIndex] = { nameToNum: {}, numToName: {} }
         let lastRawResult = "";
+        let lastDecodedResults = [];
         let lastStrength = 0;
         let lastValues = [];
         
@@ -1220,6 +1221,7 @@ if (strength > paramValue) {
 
     // ✅ STORE FINAL STATE (single source of truth)
     lastRawResult = realCases.join("\n");
+    lastDecodedResults = realCases.slice();
     lastStrength = document.getElementById("strengthInput")?.value || strength;
     lastValues = parameters.filter(p => p.inputs.length > 0).map(p => p.inputs.length);
 
@@ -1262,14 +1264,12 @@ if (strength > paramValue) {
 
             xml += `  </parameters>\n`;
 
-                        if (lastRawResult) {
-                const decodedForXML = decodeBackendResult(
-                    lastRawResult,
-                    parameters.filter(p => p.inputs.length > 0)
-                ).join("\n");
+                        if (lastDecodedResults.length > 0) {
+    const decodedForXML = lastDecodedResults.join("\n");
 
-                xml += `  <generatedTestSuite><![CDATA[\n${decodedForXML}\n]]></generatedTestSuite>\n`;
-            }
+    xml += `  <generatedTestSuite><![CDATA[\n${decodedForXML}\n]]></generatedTestSuite>\n`;
+}
+
 
             xml += `</combinatorialTestDesign>`;
 
@@ -1340,7 +1340,8 @@ if (strength > paramValue) {
                     .map(l => l.trim())
                     .filter(l => l);
 
-                renderDecodedResults(results);
+                const strength = document.getElementById("strengthInput")?.value || 2;
+                renderDecodedResults(results, strength);
 
                 // restore session state
                 lastRawResult = text;
